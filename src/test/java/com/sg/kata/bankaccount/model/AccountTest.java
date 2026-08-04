@@ -81,4 +81,17 @@ class AccountTest {
         assertThat(account.getBalance())
                 .isEqualByComparingTo(BigDecimal.ZERO);
     }
+    @Test
+    void should_reject_withdrawal_when_balance_is_insufficient() {
+        Account account = new Account();
+        account.deposit(new BigDecimal("100.00"));
+
+        assertThatThrownBy(() ->
+                account.withdraw(new BigDecimal("150.00")))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("Insufficient funds");
+
+        assertThat(account.getBalance())
+                .isEqualByComparingTo(new BigDecimal("100.00"));
+    }
 }
