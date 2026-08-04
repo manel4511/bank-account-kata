@@ -4,17 +4,31 @@ import com.sg.kata.bankaccount.exception.InsufficientFundsException;
 import com.sg.kata.bankaccount.exception.InvalidAmountException;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Account {
 
     private BigDecimal balance = BigDecimal.ZERO;
+    private final List<Operation> operations = new ArrayList<>();
 
     public void deposit(BigDecimal amount) {
+
         validateAmount(amount);
+
         balance = balance.add(amount);
+
+        operations.add(new Operation(
+                OperationType.DEPOSIT,
+                LocalDate.now(),
+                amount,
+                balance
+        ));
     }
 
     public void withdraw(BigDecimal amount) {
+
         validateAmount(amount);
 
         if (balance.compareTo(amount) < 0) {
@@ -22,17 +36,28 @@ public class Account {
         }
 
         balance = balance.subtract(amount);
+
+        operations.add(new Operation(
+                OperationType.WITHDRAWAL,
+                LocalDate.now(),
+                amount.negate(),
+                balance
+        ));
     }
 
     public BigDecimal getBalance() {
         return balance;
     }
 
+    public List<Operation> getOperations() {
+        return List.copyOf(operations);
+    }
+
     private void validateAmount(BigDecimal amount) {
+
         if (amount == null || amount.signum() <= 0) {
             throw new InvalidAmountException(
-                    "Amount must be strictly positive"
-            );
+                    "Amount must be strictly positive");
         }
     }
 }
