@@ -52,4 +52,33 @@ class AccountTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Amount must be strictly positive");
     }
+    @Test
+    void should_withdraw_money() {
+
+        // Given
+        Account account = new Account();
+        account.deposit(new BigDecimal("100.00"));
+
+        // When
+        account.withdraw(new BigDecimal("30.00"));
+
+        // Then
+        assertThat(account.getBalance())
+                .isEqualByComparingTo(new BigDecimal("70.00"));
+    }
+
+    @Test
+    void should_withdraw_the_entire_balance() {
+
+        // Given
+        Account account = new Account();
+        account.deposit(new BigDecimal("100.00"));
+
+        // When
+        account.withdraw(new BigDecimal("100.00"));
+
+        // Then
+        assertThat(account.getBalance())
+                .isEqualByComparingTo(BigDecimal.ZERO);
+    }
 }
