@@ -129,4 +129,23 @@ class AccountTest {
         assertThat(withdrawal.balance())
                 .isEqualByComparingTo(new BigDecimal("60.00"));
     }
+    @Test
+    void should_print_account_statement() {
+
+        // Given
+        Account account = new Account();
+
+        account.deposit(new BigDecimal("100.00"));
+        account.withdraw(new BigDecimal("40.00"));
+
+        // When
+        String statement = account.printStatement();
+
+        // Then
+        assertThat(statement).contains("DEPOSIT");
+        assertThat(statement).contains("WITHDRAWAL");
+        assertThat(statement).contains("100.00");
+        assertThat(statement).contains("-40.00");
+        assertThat(statement).contains("60.00");
+    }
 }
