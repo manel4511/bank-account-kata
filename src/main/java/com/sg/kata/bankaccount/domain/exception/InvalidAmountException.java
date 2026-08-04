@@ -1,4 +1,4 @@
-package com.sg.kata.bankaccount.exception;
+package com.sg.kata.bankaccount.domain.exception;
 
 public class InvalidAmountException extends RuntimeException {
 
