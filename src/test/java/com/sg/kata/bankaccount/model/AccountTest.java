@@ -5,6 +5,7 @@ import com.sg.kata.bankaccount.exception.InvalidAmountException;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -96,5 +97,36 @@ class AccountTest {
 
         assertThat(account.getBalance())
                 .isEqualByComparingTo(new BigDecimal("100.00"));
+    }
+    @Test
+    void should_keep_account_statement_history() {
+
+        // Given
+        Account account = new Account();
+
+        // When
+        account.deposit(new BigDecimal("100.00"));
+        account.withdraw(new BigDecimal("40.00"));
+
+        // Then
+        assertThat(account.getOperations()).hasSize(2);
+
+        Operation deposit = account.getOperations().get(0);
+
+        assertThat(deposit.type()).isEqualTo(OperationType.DEPOSIT);
+        assertThat(deposit.date()).isEqualTo(LocalDate.now());
+        assertThat(deposit.amount())
+                .isEqualByComparingTo(new BigDecimal("100.00"));
+        assertThat(deposit.balance())
+                .isEqualByComparingTo(new BigDecimal("100.00"));
+
+        Operation withdrawal = account.getOperations().get(1);
+
+        assertThat(withdrawal.type()).isEqualTo(OperationType.WITHDRAWAL);
+        assertThat(withdrawal.date()).isEqualTo(LocalDate.now());
+        assertThat(withdrawal.amount())
+                .isEqualByComparingTo(new BigDecimal("-40.00"));
+        assertThat(withdrawal.balance())
+                .isEqualByComparingTo(new BigDecimal("60.00"));
     }
 }
