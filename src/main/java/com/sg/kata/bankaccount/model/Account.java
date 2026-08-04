@@ -53,11 +53,30 @@ public class Account {
         return List.copyOf(operations);
     }
 
-    private void validateAmount(BigDecimal amount) {
+    public String printStatement() {
+        StringBuilder statement = new StringBuilder(
+                "OPERATION | DATE | AMOUNT | BALANCE"
+        );
 
+        for (Operation operation : operations) {
+            statement.append(System.lineSeparator())
+                    .append(operation.type())
+                    .append(" | ")
+                    .append(operation.date())
+                    .append(" | ")
+                    .append(operation.amount())
+                    .append(" | ")
+                    .append(operation.balance());
+        }
+
+        return statement.toString();
+    }
+
+    private void validateAmount(BigDecimal amount) {
         if (amount == null || amount.signum() <= 0) {
             throw new InvalidAmountException(
-                    "Amount must be strictly positive");
+                    "Amount must be strictly positive"
+            );
         }
     }
 }
