@@ -41,7 +41,7 @@ class AccountControllerTest {
                 .thenReturn(new BigDecimal("100.00"));
 
         mockMvc.perform(
-                        post("/accounts/deposits")
+                        post("/api/v1/account/deposits")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {
@@ -60,7 +60,7 @@ class AccountControllerTest {
                 .thenReturn(new BigDecimal("60.00"));
 
         mockMvc.perform(
-                        post("/accounts/withdrawals")
+                        post("/api/v1/account/withdrawals")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {
@@ -79,7 +79,7 @@ class AccountControllerTest {
                 .thenReturn(new BigDecimal("60.00"));
 
         mockMvc.perform(
-                        get("/accounts/balance")
+                        get("/api/v1/account/balance")
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.balance").value(60.00));
@@ -101,7 +101,7 @@ class AccountControllerTest {
                 );
 
         mockMvc.perform(
-                        get("/accounts/statement")
+                        get("/api/v1/account/statement")
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].type").value("DEPOSIT"))
@@ -119,7 +119,7 @@ class AccountControllerTest {
                         """);
 
         mockMvc.perform(
-                        get("/accounts/statement/print")
+                        get("/api/v1/account/statement/print")
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().string(org.hamcrest.Matchers.containsString("DEPOSIT")));
@@ -129,7 +129,7 @@ class AccountControllerTest {
     void should_return_bad_request_for_invalid_amount() throws Exception {
 
         mockMvc.perform(
-                        post("/accounts/deposits")
+                        post("/api/v1/account/deposits")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {
@@ -152,7 +152,7 @@ class AccountControllerTest {
                 ));
 
         mockMvc.perform(
-                        post("/accounts/withdrawals")
+                        post("/api/v1/account/withdrawals")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("""
                                         {
