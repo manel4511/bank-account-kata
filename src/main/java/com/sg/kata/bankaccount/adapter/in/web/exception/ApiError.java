@@ -11,4 +11,9 @@ public record ApiError(
         String path,
         Map<String, String> validationErrors
 ) {
+    public ApiError {
+        validationErrors = validationErrors == null
+                ? Map.of()
+                : Map.copyOf(validationErrors);
+    }
 }

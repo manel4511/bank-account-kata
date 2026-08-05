@@ -54,6 +54,18 @@ class AccountControllerTest {
     }
 
     @Test
+    void should_return_bad_request_when_amount_is_missing() throws Exception {
+        mockMvc.perform(
+                        post("/api/v1/account/deposits")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{}")
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.validationErrors.amount")
+                        .value("Amount is required"));
+    }
+
+    @Test
     void should_withdraw_money() throws Exception {
 
         when(accountUseCase.withdraw(new BigDecimal("40.00")))
@@ -71,7 +83,25 @@ class AccountControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.balance").value(60.00));
     }
+    @Test
+    void should_return_bad_request_when_amount_has_more_than_two_decimal_places()
+            throws Exception {
 
+        mockMvc.perform(
+                        post("/api/v1/account/deposits")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("""
+                                    {
+                                      "amount": 10.001
+                                    }
+                                    """)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message")
+                        .value("Request validation failed"))
+                .andExpect(jsonPath("$.validationErrors.amount")
+                        .value("Amount must have at most two decimal places"));
+    }
     @Test
     void should_return_current_balance() throws Exception {
 

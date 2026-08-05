@@ -43,7 +43,15 @@ class AccountTest {
                 .hasMessage("Amount must be strictly positive");
 
     }
+    @Test
+    void should_reject_amount_with_more_than_two_decimal_places() {
+        Account account = new Account();
 
+        assertThatThrownBy(() ->
+                account.deposit(new BigDecimal("10.001"), DATE))
+                .isInstanceOf(InvalidAmountException.class)
+                .hasMessage("Amount must have at most two decimal places");
+    }
     @Test
     void should_withdraw_money() {
         Account account = new Account();
@@ -102,6 +110,21 @@ class AccountTest {
         assertThat(account.getBalance())
                 .isEqualByComparingTo("100.00");
     }
+
+    @Test
+    void should_reject_withdrawal_amount_with_more_than_two_decimal_places() {
+        Account account = new Account();
+        account.deposit(new BigDecimal("100.00"), DATE);
+
+        assertThatThrownBy(() ->
+                account.withdraw(new BigDecimal("10.001"), DATE))
+                .isInstanceOf(InvalidAmountException.class)
+                .hasMessage("Amount must have at most two decimal places");
+
+        assertThat(account.getBalance())
+                .isEqualByComparingTo("100.00");
+    }
+
     @Test
     void should_keep_account_statement_history() {
         Account account = new Account();

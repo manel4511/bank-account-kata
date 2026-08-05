@@ -24,7 +24,8 @@ public class OpenApiConfig {
                                 .version("1.0.0")
                                 .contact(
                                         new Contact()
-                                                .name("Saifeddine Abidi")
+                                                .name("new Contact()\n" +
+                                                        "        .name(\"Manel Ben Salah\")")
                                 )
                 );
     }

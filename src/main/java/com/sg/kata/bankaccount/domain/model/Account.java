@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public final class Account {
+public class Account {
 
     private BigDecimal balance = BigDecimal.ZERO;
     private final List<AccountOperation> accountOperations = new ArrayList<>();
@@ -60,10 +60,15 @@ public final class Account {
                     "Amount must be strictly positive"
             );
         }
+        if (amount.scale() > 2) {
+            throw new InvalidAmountException(
+                    "Amount must have at most two decimal places"
+            );
+        }
 
     }
 
     private void validateDate(LocalDate date) {
-        Objects.requireNonNull(date, "AccountOperation date is required");
+        Objects.requireNonNull(date, "Operation date is required");
     }
 }
