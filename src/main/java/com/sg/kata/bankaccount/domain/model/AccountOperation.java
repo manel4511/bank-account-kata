@@ -12,9 +12,9 @@ public record AccountOperation(
 ) {
 
     public AccountOperation {
-        Objects.requireNonNull(type, "AccountOperation type is required");
-        Objects.requireNonNull(date, "AccountOperation date is required");
-        Objects.requireNonNull(amount, "AccountOperation amount is required");
-        Objects.requireNonNull(balance, "AccountOperation balance is required");
+        Objects.requireNonNull(type, "Operation type is required");
+        Objects.requireNonNull(date, "Operation date is required");
+        Objects.requireNonNull(amount, "Operation amount is required");
+        Objects.requireNonNull(balance, "Operation balance is required");
     }
 }

@@ -81,7 +81,27 @@ class AccountTest {
 
         assertThat(account.getOperations()).hasSize(1);
     }
+    @Test
+    void should_reject_invalid_withdrawal_amounts() {
+        Account account = new Account();
+        account.deposit(new BigDecimal("100.00"), DATE);
 
+        assertThatThrownBy(() -> account.withdraw(null, DATE))
+                .isInstanceOf(InvalidAmountException.class)
+                .hasMessage("Amount must be strictly positive");
+
+        assertThatThrownBy(() -> account.withdraw(BigDecimal.ZERO, DATE))
+                .isInstanceOf(InvalidAmountException.class)
+                .hasMessage("Amount must be strictly positive");
+
+        assertThatThrownBy(() ->
+                account.withdraw(new BigDecimal("-10.00"), DATE))
+                .isInstanceOf(InvalidAmountException.class)
+                .hasMessage("Amount must be strictly positive");
+
+        assertThat(account.getBalance())
+                .isEqualByComparingTo("100.00");
+    }
     @Test
     void should_keep_account_statement_history() {
         Account account = new Account();
